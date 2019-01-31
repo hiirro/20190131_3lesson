@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <div class="container col-md-4">
+        <h1 class="h3">郵便番号から住所自動入力</h1>
+        <form action="" class="">
+            <div class="form-group">
+                <label for="number">郵便番号</label>
+                <input id="number" type="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="cvc">住所1</label>
+                <div class="form-group">
+                    <input id="cvc" type="text" name="cvc" value="" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="card_name">住所2</label>
+                <input id="card_name" type="text" value="" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="送信する" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+
+        $('#number').on("change", function () {
+            const num = $(this).val();
+            $.ajax({/* 実際に行いたい非同期通信の詳細*/
+                url: "http://zipcloud.ibsnet.co.jp/api/search",
+                type: "GET",
+                dataType: "jsonp",
+                data: {
+                    zipcode: num
+                },
+            }).done(function (data) {
+                console.log(data);
+                const address1 = data.results[0].address1;//東京都
+                const address2 = data.results[0].address2;//世田谷区
+                const address3 = data.results[0].address3;//等々力
+
+                const address = address1 + address2 + address3;
+                $("#cvc").val(address);
+
+                //結果によって処理を振り分ける
+                // if (data.status == 200) {
+                //     //処理が成功したとき
+                //     //該当する住所を表示
+                //     let html = '';
+                //     for (var i = 0; i < data.results.length; i++) {
+                //         const result = data.results[i];
+                //         html += result.address1;
+                //         html += result.address2;
+                //     }
+                //     $('#address1').val(html);
+                // } else {
+                //     //エラーだった時
+                //     //エラー内容を表示
+                //     $('#zip_result').html(data.message);
+
+                // }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                /* 第一引数には通信結果の詳細、第二引数にはエラー情報、第三引数
+                には例外情報がそれぞれ入ります。*/
+                alert("エラーです。記載内容を確認してください。");
+            });
+        });
+
+    </script>
+</body>
+
+</html>

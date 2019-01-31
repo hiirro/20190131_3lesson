@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <style>
+        .flex-list {
+    display: flex;
+    }
+    </style>
+
+</head>
+
+<body>
+    <div class="container col-md-4">
+        <h1 class="h3">クレジットカード入力</h1>
+        <form action="" class="">
+            <div class="form-group">
+                <label for="number">カード番号</label>
+                <div class="row">
+                    <div class="form-group col flex-list">
+                        <input id="number1" type="text" class="form-control form-control__card" placeholder="1234"
+                            maxlength="4" pattern="([0-9]|)*">
+                        <input id="number2" type="text" class="form-control form-control__card" placeholder="1234"
+                            maxlength="4" pattern="([0-9]|)*">
+                        <input id="number3" type="text" class="form-control form-control__card" placeholder="1234"
+                            maxlength="4" pattern="([0-9]|)*">
+                        <input id="number4" type="text" class="form-control form-control__card" placeholder="1234"
+                            maxlength="4" pattern="([0-9]|)*">
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="form-group">
+                <label for="">有効期限</label>
+                <div class="row">
+                    <div class="form-group col-md-6 flex-list">
+                        <select class="form-control" id="exp_month" placeholder="月" value="">
+                        </select>
+                        <select class="form-control" id="exp_year" placeholder="年" value="">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cvc">セキュリティコード</label>
+                <div class="form-group">
+                    <input id="cvc" type="text" name="cvc" value="" class="form-control" maxlength="4" placeholder="例) 123"
+                        pattern="([0-9]|)*">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="card_name">カード名義</label>
+                <input id="card_name" type="text" value="" class="form-control" placeholder="例）TARO SATO" pattern="[A-Za-z0-9]+$">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="送信する" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        const nodelist = document.querySelectorAll('.form-control__card');
+        const enableKey = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "Backspace", "Tab"];
+
+        nodelist.forEach(function (item, index) {//indexは何番目なのかというものを指定できる。
+            // console.log(index);
+            item.addEventListener('keyup', function (e) {
+                console.log(e.key);//1
+                console.log(enableKey.indexOf(e.key));//配列の中の何番目かを確認。配列の中になければ、-1が返ってくる。
+                //配列の中に特定の値が含まれているかを判別する。含まれていれば入力を許可するなど
+                // if (enableKey.indexOf(e.key) < 0) {
+                //     e.preventDefault();
+                //     return false;
+                // }
+                // console.log(this.value.length);//入力されている値にlengthを使用すると、何桁か確認することができる。
+                const strlength = this.value.length;
+                if (strlength === 4 && index != 3) {
+                    // $(this).next()//nextで次のhtmlを指し示すことができる
+                    this.nextElementSibling.focus();
+                } else if (strlength === 0 && index != 0) {
+                    this.previousElementSibling.focus();
+                }
+
+            });
+            item.addEventListener("keydown", function (e) {
+                if (enableKey.indexOf(e.key) < 0) {
+                    e.preventDefault();
+                    return false;
+                }
+
+            });
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
